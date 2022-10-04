@@ -8,17 +8,37 @@
 #define   likely(expr) __builtin_expect((expr), 1)
 
 
+uint_fast32_t load32(const void* V);
+static inline uint_fast32_t nonzero_chunk(const char *p);
+int is_empty_fast(const char * buf, size_t size);
+
+
 static inline uint_fast32_t nonzero_chunk(const char *p)
 {
     uint_fast32_t tmp1, tmp2;    
-    const unsigned width = sizeof(tmp1);
 
-    memcpy(&tmp1, p, width);
-    memcpy(&tmp2, p + width, width);
+    tmp1 = load32(&tmp1);
+    tmp2 = load32(&tmp2);
 
     return tmp1|tmp2;
 }
 
+uint_fast32_t load32(const void* V)
+{
+   uint_fast32_t Ret = 0;
+   uint8_t* Val = (uint8_t*) V;
+
+   Ret |= ((uint_fast32_t) Val[0]);
+   Ret |= ((uint_fast32_t) Val[1]) << 4;
+   Ret |= ((uint_fast32_t) Val[2]) << 8;
+   Ret |= ((uint_fast32_t) Val[3]) << 12;
+   Ret |= ((uint_fast32_t) Val[4]) << 16;
+   Ret |= ((uint_fast32_t) Val[5]) << 20;
+   Ret |= ((uint_fast32_t) Val[6]) << 24;
+   Ret |= ((uint_fast32_t) Val[7]) << 28;
+
+   return Ret;
+}
 
 int is_empty_fast(const char * buf, size_t size) 
 {
