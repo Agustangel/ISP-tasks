@@ -17,7 +17,7 @@ static inline uint_fast32_t nonzero_chunk(const char *p)
 {
     uint_fast32_t tmp1, tmp2;    
 
-    tmp1 = load32(&tmp1);
+    tmp1 = load32(&tmp);
     tmp2 = load32(&tmp2);
 
     return tmp1|tmp2;
